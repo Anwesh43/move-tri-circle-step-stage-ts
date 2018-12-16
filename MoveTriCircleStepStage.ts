@@ -9,29 +9,29 @@ const sizeFactor : number = 3
 const divideScale : Function = (scale : number, i : number, n : number) : number => Math.min(1/n, Math.max(0, scale - i / n )) * n
 
 const drawMTCNode : Function = (context : CanvasRenderingContext2D, i : number, scale : number) => {
-    const gap : number = w / (nodes + 1)
+    const gap : number = h / (nodes + 1)
     const size : number = gap / sizeFactor
     const sc1 : number = divideScale(scale, 0, 3)
     const sc2 : number = divideScale(scale, 1, 3)
     const sc3 : number = divideScale(scale, 2, 3)
     const sf : number = 1 - 2 * (i % 2)
-    const h : number = size * Math.sqrt(3) / 2
+    const hi : number = size * Math.sqrt(3)
     context.strokeStyle = color
     context.lineWidth = Math.min(w, h) / strokeFactor
     context.lineCap = 'round'
     context.save()
-    context.translate(w/2 + w/2 * sc2, gap * (i + 1))
-    context.rotate(Math.PI/2 * sf * sc3)
+    context.translate(w/2 + w/2 * sc3 * sf, gap * (i + 1))
+    context.rotate(Math.PI/2 * sf * sc2)
     context.beginPath()
-    context.moveTo(-size, -h/2)
-    context.lineTo(size, -h/2)
-    context.lineTo(0, h/2)
-    context.lineTo(-size, -h/2)
+    context.moveTo(-size, -hi/2)
+    context.lineTo(size, -hi/2)
+    context.lineTo(0, hi/2)
+    context.lineTo(-size, -hi/2)
     context.stroke()
     context.beginPath()
-    for(var t = 0; t <= 2 * Math.PI * sc1; t++) {
-        const x = (h/2) * Math.cos(t * Math.PI/180)
-        const y = (h/2) * Math.sin(t * Math.PI/180)
+    for(var t = 0; t <= 360 * sc1; t++) {
+        const x = (hi/3) * Math.cos(t * Math.PI/180)
+        const y = (hi/3) * Math.sin(t * Math.PI/180)
         if (t == 0) {
             context.moveTo(x, y)
         } else {
