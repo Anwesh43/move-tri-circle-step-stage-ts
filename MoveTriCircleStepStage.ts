@@ -8,6 +8,32 @@ const sizeFactor : number = 3
 
 const divideScale : Function = (scale : number, i : number, n : number) : number => Math.min(1/n, Math.max(0, scale - i / n )) * n
 
+const drawTriangle = (context, hi, size) => {
+    context.beginPath()
+    context.moveTo(-size, hi/2)
+    context.lineTo(size, hi/2)
+    context.lineTo(0, -hi/2)
+    context.lineTo(-size, hi/2)
+    context.stroke()
+}
+
+const drawCircle = (context, x, y, r, sc) => {
+    context.beginPath()
+    context.save()
+    context.translate(x, y)
+    for(var t = 0; t <= 360 * sc; t++) {
+        const xa = (r) * Math.cos(t * Math.PI/180)
+        const ya = (r) * Math.sin(t * Math.PI/180)
+        if (t == 0) {
+            context.moveTo(xa, ya)
+        } else {
+            context.lineTo(xa, ya)
+        }
+    }
+    context.stroke()
+    context.restore()
+}
+
 const drawMTCNode : Function = (context : CanvasRenderingContext2D, i : number, scale : number) => {
     const gap : number = h / (nodes + 1)
     const size : number = gap / sizeFactor
@@ -20,25 +46,10 @@ const drawMTCNode : Function = (context : CanvasRenderingContext2D, i : number, 
     context.lineWidth = Math.min(w, h) / strokeFactor
     context.lineCap = 'round'
     context.save()
-    context.translate(w/2 + w/2 * sc3 * sf, gap * (i + 1))
+    context.translate(w/2 + (w/2 - size) * sc3 * sf, gap * (i + 1))
     context.rotate(Math.PI/2 * sf * sc2)
-    context.beginPath()
-    context.moveTo(-size, -hi/2)
-    context.lineTo(size, -hi/2)
-    context.lineTo(0, hi/2)
-    context.lineTo(-size, -hi/2)
-    context.stroke()
-    context.beginPath()
-    for(var t = 0; t <= 360 * sc1; t++) {
-        const x = (hi/3) * Math.cos(t * Math.PI/180)
-        const y = (hi/3) * Math.sin(t * Math.PI/180)
-        if (t == 0) {
-            context.moveTo(x, y)
-        } else {
-            context.lineTo(x, y)
-        }
-    }
-    context.stroke()
+    drawTriangle(context, hi, size)
+    drawCircle(context, 0, (hi/2 - hi/3), hi/3, sc1)
     context.restore()
 }
 
