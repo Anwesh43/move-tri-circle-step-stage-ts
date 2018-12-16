@@ -180,3 +180,24 @@ class Animator {
         this.curr.startUpdating(cb)
     }
  }
+
+ class Renderer {
+    animator : Animator = new Animator()
+    mtcs : MoveTriCircleStep = new MoveTriCircleStep()
+
+    render(context : CanvasRenderingContext2D) {
+        this.mtcs.draw(context)
+    }
+
+    handleTap(cb : Function) {
+        this.mtcs.startUpdating(() => {
+            this.animator.start(() => {
+                cb()
+                this.mtcs.update(() => {
+                    this.animator.stop()
+                    cb()
+                })
+            })
+        })
+    }
+ }
